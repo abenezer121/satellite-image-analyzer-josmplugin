@@ -11,7 +11,7 @@ import org.openstreetmap.josm.data.osm.*;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.gui.MainApplication;
 import org.openstreetmap.josm.tools.Logging;
-
+import com.example.utils.JsonParser;
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -48,18 +48,40 @@ public class CoordinateFetcher {
 
                 String json = responseStr.toString().trim();
 
-               
-                SimpleJsonParser sjp = new SimpleJsonParser();
-                List<List<double[]>>  array = sjp.parse(json);
-               
-                List<double[]> coordinates = new ArrayList<>();
-                for (List<double[]> _line :array) {
-                    coordinates.addAll(_line);  
+                List<JsonParser.Token> tokens = JsonParser.getTokens(json);
+                JsonParser.Parser parser = new JsonParser.Parser(tokens);
+                Object result = parser.parse();
+                if (result instanceof List) {
+                    List<?> lines = (List<?>) result;
+                
+                    for (int i = 0; i < lines.size(); i++) {
+                        System.out.println("Line " + (i + 1) + ":");
+                
+                        Object lineObj = lines.get(i);
+                        if (lineObj instanceof List) {
+                            List<?> points = (List<?>) lineObj;
+                            List<double[]> coordinates = new ArrayList<>();
+                            for (int j = 0; j < points.size(); j++) {
+                                Object pointObj = points.get(j);
+                                if (pointObj instanceof List) {
+                                    List<?> coords = (List<?>) pointObj;
+                                    if (coords.size() == 2) {
+                                        double lat = ((Number) coords.get(0)).doubleValue();
+                                        double lon = ((Number) coords.get(1)).doubleValue();
+                                        double []coord = {lat , lon};
+                                        coordinates.add(coord);
+                                    }
+                                }
+                            }
+                            SwingUtilities.invokeLater(() -> createHighway(coordinates));
+                        }
+                    }
+                } else {
+                   throw new Error("Invalid json");
                 }
-
-              
-                SwingUtilities.invokeLater(() -> createHighway(coordinates));
-
+                
+               
+               
             } catch (Exception ex) {
                 Logging.error("Error fetching coordinates: " + ex.getMessage());
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(MainApplication.getMainFrame(),
@@ -90,6 +112,7 @@ public class CoordinateFetcher {
         }
 
         way.put("highway", "motorway");
+        way.put("josm_color", "pink"); 
         commands.add(new AddCommand(dataSet, way));
 
         UndoRedoHandler.getInstance().add(new SequenceCommand("Create Highway", commands));

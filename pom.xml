@@ -35,7 +35,7 @@
                 <version>3.2.2</version> <configuration>
                     <archive>
                         <manifestEntries>
-                            <Plugin-Class>com.example.MySimplePlugin</Plugin-Class> </manifestEntries>
+                            <Plugin-Class>com.example.SIAP</Plugin-Class> </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>

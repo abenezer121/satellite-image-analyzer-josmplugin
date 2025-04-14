@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://josm.openstreetmap.de/plugin-1.0"
-      name="MySimplePlugin"
+      name="SIAP"
       description="A simple JOSM plugin showing a message."  version="1.0"                                       author="Your Name"
       link="optional-link-to-plugin-info"
-      main-class="com.example.MySimplePlugin"
+      main-class="com.example.SIAP"
       early="false">
     <requires josm="18700"/> </plugin>
