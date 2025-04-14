@@ -1,0 +1,7 @@
+com/example/service/SimpleJsonParser.class
+com/example/model/BoundingBox.class
+com/example/ui/BBoxDrawingMode.class
+com/example/MySimplePlugin.class
+com/example/model/HttpResponse.class
+com/example/ui/BBoxDrawingMode$1.class
+com/example/service/CoordinateFetcher.class

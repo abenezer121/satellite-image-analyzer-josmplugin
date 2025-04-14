@@ -1,0 +1,1 @@
+ cp target/hello-josm-plugin-1.0-SNAPSHOT.jar ~/.josm/plugins/
